@@ -45,5 +45,7 @@ class Message(models.Model):
     class Meta:
         managed = False
         db_table = 'message'
+        ordering = ['-created_at']
+
 
 
