@@ -38,8 +38,8 @@ class Conversation(models.Model):
 class Message(models.Model):
     text = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(blank=True, null=True)
-    sender = models.ForeignKey('User', db_column='sender', blank=True, null=True)
-    receiver = models.ForeignKey('User', db_column='receiver', blank=True, null=True)
+    sender = models.ForeignKey('User', related_name='sender', db_column='sender', blank=True, null=True)
+    receiver = models.ForeignKey('User', related_name='receiver', db_column='receiver', blank=True, null=True)
     conversation = models.ForeignKey(Conversation, related_name='messages', blank=True, null=True)
 
     class Meta:
