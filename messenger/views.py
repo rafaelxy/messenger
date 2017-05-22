@@ -18,7 +18,7 @@ class ConversationView(APIView):
         conversations = Conversation.objects.filter(
             Q(id=conversation_id) &
                 (Q(messages__sender=user_id) |
-                 Q(messages__receiver=user_id)))
+                 Q(messages__receiver=user_id))).distinct()
 
         serializer = ConversationSerializer(conversations, many=True)
         return Response({ "conversation": serializer.data })
