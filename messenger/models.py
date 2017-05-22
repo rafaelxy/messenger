@@ -4,8 +4,8 @@ Created on May 22, 2017
 @author: rafaelxy
 """
 from __future__ import unicode_literals
-
 from django.db import models
+from django.db.models.query_utils import Q
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
@@ -46,6 +46,19 @@ class Message(models.Model):
         managed = False
         db_table = 'message'
         ordering = ['-created_at']
+
+    def is_invalid(self):
+        sender_and_receiver_are_in = self.conversation.messages.filter(
+            (Q(sender=self.sender) |
+             Q(receiver=self.sender)) &
+            (Q(sender=self.receiver) |
+             Q(receiver=self.receiver)))
+
+        if sender_and_receiver_are_in:
+            return False
+        else:
+            return { "error": "Either the sender or receiver are invalid for this conversation" }
+
 
 
 

@@ -37,7 +37,11 @@ class NewMessageView(APIView):
         new_msg.conversation = conversation
         new_msg.created_at = datetime.datetime.now()
 
-        new_msg.save()
-        conversation.save()
-        return Response(status=status.HTTP_201_CREATED)
+        errors = new_msg.is_invalid()
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            new_msg.save()
+            conversation.save()
+            return Response(status=status.HTTP_201_CREATED)
 
