@@ -1,0 +1,6 @@
+#python
+*.pyc
+
+#eclipse
+.pydevproject
+.project
