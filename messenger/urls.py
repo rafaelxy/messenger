@@ -16,9 +16,10 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.http.response import HttpResponseRedirect, \
     HttpResponsePermanentRedirect
-from messenger.views import ConversationView, ConversationView
+from messenger.views import ConversationView, ConversationView, NewMessageView
 from rest_framework import routers
 
 urlpatterns = [
     url(r'^user/(?P<user_id>[\d]+)/conversation/(?P<conversation_id>[\d]+)?$', ConversationView.as_view()),
+    url(r'^conversation/(?P<conversation_id>[\d]+)?/message$', NewMessageView.as_view()),
 ]

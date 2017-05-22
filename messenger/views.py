@@ -3,11 +3,14 @@ Created on May 22, 2017
 
 @author: rafaelxy
 """
+from django.db import transaction
 from django.db.models.query_utils import Q
-from messenger.models import Conversation
-from messenger.serlializers import ConversationSerializer
+from messenger.models import Conversation, Message
+from messenger.serlializers import ConversationSerializer, MessageSerializer
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import datetime
 
 class ConversationView(APIView):
     def get(self, request, user_id, conversation_id):
@@ -22,3 +25,19 @@ class ConversationView(APIView):
 
         serializer = ConversationSerializer(conversations, many=True)
         return Response({ "conversation": serializer.data })
+
+class NewMessageView(APIView):
+
+    @transaction.atomic
+    def post(self, request, conversation_id):
+        conversation = Conversation.objects.get(id=conversation_id)
+        conversation.message_count += 1
+
+        new_msg = Message(**request.data)
+        new_msg.conversation = conversation
+        new_msg.created_at = datetime.datetime.now()
+
+        new_msg.save()
+        conversation.save()
+        return Response(status=status.HTTP_201_CREATED)
+
