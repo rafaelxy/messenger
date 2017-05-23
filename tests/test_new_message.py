@@ -32,7 +32,7 @@ class NewMessageTests(APITestCase):
 
         self.conversation = Conversation(
             creator=self.user_a,
-            create_at=datetime.datetime.now(),
+            created_at=datetime.datetime.now(),
             message_count=0,)
         self.conversation.save()
 

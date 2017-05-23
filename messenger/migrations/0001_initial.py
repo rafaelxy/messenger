@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='Conversation',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('create_at', models.DateTimeField(blank=True, null=True)),
+                ('created_at', models.DateTimeField(blank=True, null=True)),
                 ('message_count', models.IntegerField(blank=True, null=True)),
             ],
             options={
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('username', models.CharField(max_length=50)),
-                ('full_name', models.CharField(db_column='full name', max_length=200)),
+                ('full_name', models.CharField(db_column='full_name', max_length=200)),
                 ('age', models.IntegerField()),
             ],
             options={

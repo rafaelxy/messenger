@@ -9,7 +9,7 @@ from django.db.models.query_utils import Q
 
 class User(models.Model):
     username = models.CharField(max_length=50)
-    full_name = models.CharField(db_column='full name', max_length=200)  # Field renamed to remove unsuitable characters.
+    full_name = models.CharField(max_length=200)
     age = models.IntegerField()
 
     class Meta:
@@ -17,7 +17,7 @@ class User(models.Model):
 
 class Conversation(models.Model):
     creator = models.ForeignKey('User', blank=True, null=True)
-    create_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)
     message_count = models.IntegerField(blank=True, null=True)
 
     class Meta:

@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `conversation`;
 CREATE TABLE `conversation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `creator_id` int(11) DEFAULT NULL,
-  `create_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
   `message_count` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`creator_id`),
@@ -112,7 +112,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) COLLATE utf8_bin NOT NULL,
-  `full name` varchar(200) COLLATE utf8_bin NOT NULL,
+  `full_name` varchar(200) COLLATE utf8_bin NOT NULL,
   `age` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
