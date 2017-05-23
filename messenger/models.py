@@ -23,6 +23,14 @@ class Conversation(models.Model):
     class Meta:
         db_table = 'conversation'
 
+    @classmethod
+    def find_by_user(cls, conversation_id, user_id):
+        conversations = cls.objects.filter(
+            Q(id=conversation_id) &
+                (Q(messages__sender=user_id) |
+                 Q(messages__receiver=user_id))).distinct()
+        return conversations
+
 class Message(models.Model):
     text = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(blank=True, null=True)

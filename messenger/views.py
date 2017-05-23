@@ -15,33 +15,38 @@ import datetime
 class ConversationView(APIView):
     def get(self, request, user_id, conversation_id):
         """
-        GET that filters out messages that are either from the sender or the receiver
+        GET request that filters out messages that are either from the sender
+        or the receiver
         """
-
-        conversations = Conversation.objects.filter(
-            Q(id=conversation_id) &
-                (Q(messages__sender=user_id) |
-                 Q(messages__receiver=user_id))).distinct()
-
-        serializer = ConversationSerializer(conversations, many=True)
-        return Response({ "conversation": serializer.data })
+        try:
+            conversations = Conversation.find_by_user(conversation_id, user_id)
+            serializer = ConversationSerializer(conversations, many=True)
+            return Response({ "conversation": serializer.data })
+        except Exception, e:
+            return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
 
 class NewMessageView(APIView):
-
     @transaction.atomic
     def post(self, request, conversation_id):
-        conversation = Conversation.objects.get(id=conversation_id)
-        conversation.message_count += 1
+        """
+        POST request for creating new messages in a existing conversation
+        """
+        try:
+            conversation = Conversation.objects.get(id=conversation_id)
+            conversation.message_count += 1
 
-        new_msg = Message(**request.data)
-        new_msg.conversation = conversation
-        new_msg.created_at = datetime.datetime.now()
+            new_msg = Message(**request.data)
+            new_msg.conversation = conversation
+            new_msg.created_at = datetime.datetime.now()
 
-        errors = new_msg.is_invalid()
-        if errors:
-            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            new_msg.save()
-            conversation.save()
-            return Response(status=status.HTTP_201_CREATED)
+            errors = new_msg.is_invalid()
+            if not errors:
+                new_msg.save()
+                conversation.save()
+                return Response(status=status.HTTP_201_CREATED)
+            else:
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception, e:
+            return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
+
 
